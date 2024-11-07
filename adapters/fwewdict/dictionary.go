@@ -1,14 +1,16 @@
 package fwewdict
 
 import (
-	fwew_lib "github.com/fwew/fwew-lib/v5"
-	"github.com/gissleh/litxap"
-	"github.com/gissleh/litxap/litxaputil"
+	"fmt"
 	"slices"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	fwew_lib "github.com/fwew/fwew-lib/v5"
+	"github.com/gissleh/litxap"
+	"github.com/gissleh/litxap/litxaputil"
 )
 
 type fwewDict struct {
@@ -30,6 +32,7 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 			}
 		}()
 	}
+
 	res, err := fwew_lib.TranslateFromNaviHash(word, true)
 	if atomic.CompareAndSwapInt32(&stopped, 0, 1) {
 		d.mu.Unlock()
@@ -39,6 +42,7 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 	}
 
 	entries := make([]litxap.Entry, 0, len(res))
+
 	for _, matches := range res {
 		for _, match := range matches {
 			if match.ID == "" {
@@ -46,6 +50,8 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 			}
 
 			syllables := strings.Split(strings.ToLower(match.Syllables), "-")
+
+			fmt.Println(RomanizeIPA(match.IPA))
 
 			for _, ipa := range strings.Split(match.IPA, "or") {
 				ipa = strings.Trim(ipa, " []")

@@ -1,7 +1,5 @@
 module github.com/gissleh/litxap-service
 
-// replace github.com/gissleh/litxap => ../litxap
-
 go 1.22.2
 
 require (
@@ -17,3 +15,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/gissleh/litxap => ../litxap
+//for testing on a local machine's fwew-lib
+replace github.com/fwew/fwew-lib/v5 => ../fwew-lib
