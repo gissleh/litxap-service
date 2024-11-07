@@ -45,18 +45,23 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 				continue
 			}
 
+			syllables := strings.Split(strings.ToLower(match.Syllables), "-")
+
 			for _, ipa := range strings.Split(match.IPA, "or") {
 				ipa = strings.Trim(ipa, " []")
+				ipaSyllables := strings.Split(ipa, ".")
+				if len(ipaSyllables) != len(syllables) {
+					continue
+				}
 
 				stressIndex := 0
-				for i, syllable := range strings.Split(ipa, ".") {
+				for i, syllable := range ipaSyllables {
 					if strings.HasPrefix(syllable, "ˈ") {
 						stressIndex = i
 						break
 					}
 				}
 
-				syllables := strings.Split(strings.ToLower(match.Syllables), "-")
 				suffixes := append([]string{}, match.Affixes.Suffix...)
 
 				slices.Reverse(suffixes)
