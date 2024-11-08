@@ -2,10 +2,11 @@ package namedict
 
 import (
 	"fmt"
-	"github.com/gissleh/litxap"
-	"github.com/gissleh/litxap-service/adapters/fwewdict"
 	"log"
 	"strings"
+
+	"github.com/gissleh/litxap"
+	"github.com/gissleh/litxap-service/adapters/fwewdict"
 )
 
 type nameDict struct {
