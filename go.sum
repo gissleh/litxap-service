@@ -8,6 +8,10 @@ github.com/gissleh/litxap v0.0.0-20241107163936-1c40bfdfc7f2 h1:7JpHhNdrO9ssiRKa
 github.com/gissleh/litxap v0.0.0-20241107163936-1c40bfdfc7f2/go.mod h1:EMM8k16L8helAs6RkzUYdPG2/RoBrsDdkVyicm8mQb0=
 github.com/gissleh/litxap v0.0.0-20241107211940-2ebfe063373f h1:+1P0uOxgwBEK9zFOiDj+FmHOx/kVlOoDQnVsvrAqyOw=
 github.com/gissleh/litxap v0.0.0-20241107211940-2ebfe063373f/go.mod h1:EMM8k16L8helAs6RkzUYdPG2/RoBrsDdkVyicm8mQb0=
+github.com/gissleh/litxap v0.0.0-20241108132236-c3eb191ca1f5 h1:KCgNhvV0JD0uTShV74hpA6kEtPU7xD0jmwlDafAoF38=
+github.com/gissleh/litxap v0.0.0-20241108132236-c3eb191ca1f5/go.mod h1:EMM8k16L8helAs6RkzUYdPG2/RoBrsDdkVyicm8mQb0=
+github.com/gissleh/litxap v0.0.0-20241108132738-ccc58fefd9ed h1:mOqdtSYWqKtk+EOmEJEq36DANuvL1GOX9nTtShH6I1M=
+github.com/gissleh/litxap v0.0.0-20241108132738-ccc58fefd9ed/go.mod h1:EMM8k16L8helAs6RkzUYdPG2/RoBrsDdkVyicm8mQb0=
 github.com/go-sql-driver/mysql v1.8.1 h1:LedoTUt/eveggdHS9qUFC1EFSa8bU2+1pZjSRpvNJ1Y=
 github.com/go-sql-driver/mysql v1.8.1/go.mod h1:wEBSXgmK//2ZFJyE+qWnIsVGmvmEKlqwuVSjsCm7DZg=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
