@@ -20,11 +20,6 @@ import (
 func main() {
 	dict := fwewdict.Global()
 
-	listenAddr := fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
-	if listenAddr == ":" {
-		listenAddr = ":8081"
-	}
-
 	// Calculate the multiword words needed at startup
 	// Make sure we have words that must be multiword words
 	doubles := map[string]string{}
@@ -58,7 +53,10 @@ func main() {
 		}
 	}
 
-	fmt.Println(doubles)
+	listenAddr := fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
+	if listenAddr == ":" {
+		listenAddr = ":8081"
+	}
 
 	log.Println("Starting with address:", listenAddr)
 

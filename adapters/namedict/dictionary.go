@@ -7,6 +7,7 @@ import (
 
 	"github.com/gissleh/litxap"
 	"github.com/gissleh/litxap-service/adapters/fwewdict"
+	"github.com/gissleh/litxap/litxaputil"
 )
 
 type nameDict struct {
@@ -39,6 +40,25 @@ func New(names ...string) litxap.Dictionary {
 			key := key + suffix
 			table[key] = append(table[key], fmt.Sprintf("%s: -%s: Custom Name", name, suffix))
 		}
+	}
+
+	return &nameDict{table: table}
+}
+
+func Doubles(names map[string]string) litxap.Dictionary {
+	table := make(map[string][]string)
+
+	for key, val := range names {
+		//name := strings.Replace(val, "-", ".", -1)
+		key := strings.Replace(strings.Replace(key, "*", "", -1), ".", "", -1)
+
+		syllables, _ := litxaputil.RomanizeIPA(val)
+
+		table[key] = syllables[0][0]
+		/*for _, suffix := range suffixes {
+			key := key + suffix
+			table[key] = append(table[key], fmt.Sprintf("%s: -%s: Incomplete dict entry", name, suffix))
+		}*/
 	}
 
 	return &nameDict{table: table}
