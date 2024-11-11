@@ -19,4 +19,4 @@ require (
 replace github.com/gissleh/litxap => ../litxap
 //replace github.com/gissleh/litxap/litxaputil => ../litxap/litxaputil
 //for testing on a local machine's fwew-lib
-//replace github.com/fwew/fwew-lib/v5 => ../fwew-lib
+replace github.com/fwew/fwew-lib/v5 => ../fwew-lib
