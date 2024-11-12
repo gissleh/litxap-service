@@ -1,6 +1,7 @@
 package fwewdict
 
 import (
+	"errors"
 	"slices"
 	"strings"
 	"sync"
@@ -18,6 +19,60 @@ type fwewDict struct {
 
 var once sync.Once
 var globalDict = &fwewDict{}
+
+func (d *fwewDict) LookupMultis(word string, mustDouble map[string]string) (litxap.LinePartMatch, error) {
+	lookup := strings.ToLower(word)
+
+	// See if it's tere
+	entry, ok := mustDouble[lookup]
+
+	var prefixes []string = nil
+	var suffixes []string = nil
+
+	// If it's not there, try deconjugating
+	if !ok {
+		entries := fwew_lib.Deconjugate(lookup)
+		for _, entry2 := range entries {
+			if entry2.InsistPOS != "any" && entry2.InsistPOS != "n." {
+				continue
+			}
+			entry3, ok2 := mustDouble[strings.ToLower(entry2.Word)]
+			if ok2 {
+				lookup = entry2.Word
+				ok = true
+				entry = entry3
+				prefixes = entry2.Prefixes
+				suffixes = entry2.Suffixes
+				// No infixes because these aren't verbs
+				break
+			}
+		}
+	}
+
+	// If it's in either place, see the Romanization
+	if ok {
+		// Romanize and find stress from the IPA
+		syllables0, stress0 := litxaputil.RomanizeIPA(entry)
+
+		newEntry := litxap.Entry{
+			Word:      lookup,
+			Syllables: syllables0[0][0],
+			Stress:    stress0[0][0],
+			Prefixes:  prefixes,
+			Suffixes:  suffixes,
+		}
+		syllables, stress := litxap.RunWord(word, newEntry)
+		if syllables != nil && stress >= 0 {
+			return litxap.LinePartMatch{
+				Syllables: syllables,
+				Stress:    stress,
+				Entry:     newEntry,
+			}, nil
+		}
+	}
+
+	return litxap.LinePartMatch{}, errors.New("entry not found")
+}
 
 func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 	stopped := int32(0)
