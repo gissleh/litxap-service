@@ -1,6 +1,7 @@
 package fwewdict
 
 import (
+	"bytes"
 	"errors"
 	"slices"
 	"strings"
@@ -156,9 +157,47 @@ func Adpositions() ([]string, error) {
 	return res, nil
 }
 
+func FindMultis() map[string]string {
+	// Calculate the multiword words needed at startup
+	// Make sure we have words that must be multiword words
+	doubles := map[string]string{}
+	multis := fwew_lib.GetMultiwordWords()
+	fullWord := bytes.NewBuffer(make([]byte, 0, 16))
+	IPAstring := []string{}
+	for key, val := range multis {
+		for _, stringArray := range val {
+			fullWord.Reset()
+			fullWord.WriteString(key + " ")
+			for i, multiword := range stringArray {
+				fullWord.WriteString(multiword)
+				if i+1 != len(stringArray) {
+					fullWord.WriteString(" ")
+				}
+			}
+			result1, _ := fwew_lib.TranslateFromNaviHash(key, true)
+			result2, _ := fwew_lib.TranslateFromNaviHash(fullWord.String(), true)
+			IPAstring = strings.Split(result2[0][1].IPA, " ")
+
+			if len(result1[0]) < 2 {
+				doubles[key] = IPAstring[0]
+			}
+
+			for i, multiword := range stringArray {
+				res3, _ := fwew_lib.TranslateFromNaviHash(multiword, true)
+				if len(res3[0]) < 2 {
+					doubles[multiword] = IPAstring[i+1]
+				}
+			}
+		}
+	}
+
+	return doubles
+}
+
 func Global() litxap.Dictionary {
 	once.Do(func() {
 		fwew_lib.StartEverything()
+		MustDouble = FindMultis()
 	})
 
 	return globalDict
