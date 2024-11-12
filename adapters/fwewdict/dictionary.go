@@ -1,14 +1,17 @@
 package fwewdict
 
 import (
-	fwew_lib "github.com/fwew/fwew-lib/v5"
-	"github.com/gissleh/litxap"
-	"github.com/gissleh/litxap/litxaputil"
+	"bytes"
+	"errors"
 	"slices"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	fwew_lib "github.com/fwew/fwew-lib/v5"
+	"github.com/gissleh/litxap"
+	"github.com/gissleh/litxap/litxaputil"
 )
 
 type fwewDict struct {
@@ -17,6 +20,61 @@ type fwewDict struct {
 
 var once sync.Once
 var globalDict = &fwewDict{}
+var MustDouble map[string]string
+
+func (d *fwewDict) LookupMultis(word string) (litxap.LinePartMatch, error) {
+	lookup := strings.ToLower(word)
+
+	// See if it's tere
+	entry, ok := MustDouble[lookup]
+
+	var prefixes []string = nil
+	var suffixes []string = nil
+
+	// If it's not there, try deconjugating
+	if !ok {
+		entries := fwew_lib.Deconjugate(lookup)
+		for _, entry2 := range entries {
+			if entry2.InsistPOS != "any" && entry2.InsistPOS != "n." {
+				continue
+			}
+			entry3, ok2 := MustDouble[strings.ToLower(entry2.Word)]
+			if ok2 {
+				lookup = entry2.Word
+				ok = true
+				entry = entry3
+				prefixes = entry2.Prefixes
+				suffixes = entry2.Suffixes
+				// No infixes because these aren't verbs
+				break
+			}
+		}
+	}
+
+	// If it's in either place, see the Romanization
+	if ok {
+		// Romanize and find stress from the IPA
+		syllables0, stress0 := litxaputil.RomanizeIPA(entry)
+
+		newEntry := litxap.Entry{
+			Word:      lookup,
+			Syllables: syllables0[0][0],
+			Stress:    stress0[0][0],
+			Prefixes:  prefixes,
+			Suffixes:  suffixes,
+		}
+		syllables, stress := litxap.RunWord(word, newEntry)
+		if syllables != nil && stress >= 0 {
+			return litxap.LinePartMatch{
+				Syllables: syllables,
+				Stress:    stress,
+				Entry:     newEntry,
+			}, nil
+		}
+	}
+
+	return litxap.LinePartMatch{}, errors.New("entry not found")
+}
 
 func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 	stopped := int32(0)
@@ -30,6 +88,7 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 			}
 		}()
 	}
+
 	res, err := fwew_lib.TranslateFromNaviHash(word, true)
 	if atomic.CompareAndSwapInt32(&stopped, 0, 1) {
 		d.mu.Unlock()
@@ -39,6 +98,7 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 	}
 
 	entries := make([]litxap.Entry, 0, len(res))
+
 	for _, matches := range res {
 		for _, match := range matches {
 			if match.ID == "" {
@@ -101,9 +161,47 @@ func Adpositions() ([]string, error) {
 	return res, nil
 }
 
+func FindMultis() map[string]string {
+	// Calculate the multiword words needed at startup
+	// Make sure we have words that must be multiword words
+	doubles := map[string]string{}
+	multis := fwew_lib.GetMultiwordWords()
+	fullWord := bytes.NewBuffer(make([]byte, 0, 16))
+	IPAstring := []string{}
+	for key, val := range multis {
+		for _, stringArray := range val {
+			fullWord.Reset()
+			fullWord.WriteString(key + " ")
+			for i, multiword := range stringArray {
+				fullWord.WriteString(multiword)
+				if i+1 != len(stringArray) {
+					fullWord.WriteString(" ")
+				}
+			}
+			result1, _ := fwew_lib.TranslateFromNaviHash(key, true)
+			result2, _ := fwew_lib.TranslateFromNaviHash(fullWord.String(), true)
+			IPAstring = strings.Split(result2[0][1].IPA, " ")
+
+			if len(result1[0]) < 2 {
+				doubles[key] = IPAstring[0]
+			}
+
+			for i, multiword := range stringArray {
+				res3, _ := fwew_lib.TranslateFromNaviHash(multiword, true)
+				if len(res3[0]) < 2 {
+					doubles[multiword] = IPAstring[i+1]
+				}
+			}
+		}
+	}
+
+	return doubles
+}
+
 func Global() litxap.Dictionary {
 	once.Do(func() {
 		fwew_lib.StartEverything()
+		MustDouble = FindMultis()
 	})
 
 	return globalDict

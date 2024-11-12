@@ -1,19 +1,22 @@
 module github.com/gissleh/litxap-service
 
-// replace github.com/gissleh/litxap => ../litxap
-
 go 1.22.2
 
 require (
-	github.com/fwew/fwew-lib/v5 v5.22.2
+	github.com/fwew/fwew-lib/v5 v5.22.3-0.20241112155007-5f43c7781335
 	github.com/stretchr/testify v1.9.0
 )
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/gissleh/litxap v0.0.0-20241108132738-ccc58fefd9ed // indirect
+	github.com/gissleh/litxap v0.0.0-20241111140912-db560b129a7c // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+//replace github.com/gissleh/litxap => ../litxap
+//replace github.com/gissleh/litxap/litxaputil => ../litxap/litxaputil
+//for testing on a local machine's fwew-lib
+//replace github.com/fwew/fwew-lib/v5 => ../fwew-lib

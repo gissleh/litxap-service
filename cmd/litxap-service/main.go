@@ -3,15 +3,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gissleh/litxap"
-	"github.com/gissleh/litxap-service/adapters/fwewdict"
-	"github.com/gissleh/litxap-service/adapters/namedict"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
+
+	"github.com/gissleh/litxap"
+	"github.com/gissleh/litxap-service/adapters/fwewdict"
+	"github.com/gissleh/litxap-service/adapters/namedict"
 )
 
 func main() {

@@ -2,14 +2,19 @@ package namedict
 
 import (
 	"fmt"
-	"github.com/gissleh/litxap"
-	"github.com/gissleh/litxap-service/adapters/fwewdict"
 	"log"
 	"strings"
+
+	"github.com/gissleh/litxap"
+	"github.com/gissleh/litxap-service/adapters/fwewdict"
 )
 
 type nameDict struct {
 	table map[string][]string
+}
+
+func (d *nameDict) LookupMultis(word string) (litxap.LinePartMatch, error) {
+	return litxap.LinePartMatch{}, litxap.ErrEntryNotFound
 }
 
 func (n *nameDict) LookupEntries(word string) ([]litxap.Entry, error) {
