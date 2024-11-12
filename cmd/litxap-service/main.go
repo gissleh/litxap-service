@@ -53,6 +53,8 @@ func main() {
 		}
 	}
 
+	fwewdict.MustDouble = doubles
+
 	listenAddr := fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
 	if listenAddr == ":" {
 		listenAddr = ":8081"

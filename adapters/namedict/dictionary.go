@@ -13,7 +13,7 @@ type nameDict struct {
 	table map[string][]string
 }
 
-func (d *nameDict) LookupMultis(word string, mustDouble map[string]string) (litxap.LinePartMatch, error) {
+func (d *nameDict) LookupMultis(word string) (litxap.LinePartMatch, error) {
 	return litxap.LinePartMatch{}, litxap.ErrEntryNotFound
 }
 

@@ -19,12 +19,13 @@ type fwewDict struct {
 
 var once sync.Once
 var globalDict = &fwewDict{}
+var MustDouble map[string]string
 
-func (d *fwewDict) LookupMultis(word string, mustDouble map[string]string) (litxap.LinePartMatch, error) {
+func (d *fwewDict) LookupMultis(word string) (litxap.LinePartMatch, error) {
 	lookup := strings.ToLower(word)
 
 	// See if it's tere
-	entry, ok := mustDouble[lookup]
+	entry, ok := MustDouble[lookup]
 
 	var prefixes []string = nil
 	var suffixes []string = nil
@@ -36,7 +37,7 @@ func (d *fwewDict) LookupMultis(word string, mustDouble map[string]string) (litx
 			if entry2.InsistPOS != "any" && entry2.InsistPOS != "n." {
 				continue
 			}
-			entry3, ok2 := mustDouble[strings.ToLower(entry2.Word)]
+			entry3, ok2 := MustDouble[strings.ToLower(entry2.Word)]
 			if ok2 {
 				lookup = entry2.Word
 				ok = true
