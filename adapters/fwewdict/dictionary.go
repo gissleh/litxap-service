@@ -144,6 +144,10 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 }
 
 func Adpositions() ([]string, error) {
+	once.Do(func() {
+		fwew_lib.StartEverything()
+	})
+
 	list, err := fwew_lib.List([]string{"pos", "has", "adp."}, 0)
 	if err != nil {
 		return nil, err
