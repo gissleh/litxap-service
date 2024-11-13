@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gissleh/litxap-service/adapters/fwewdict"
 	"log"
 	"net/http"
 	"os"
@@ -11,12 +12,14 @@ import (
 	"syscall"
 
 	"github.com/gissleh/litxap"
-	"github.com/gissleh/litxap-service/adapters/fwewdict"
 	"github.com/gissleh/litxap-service/adapters/namedict"
 )
 
 func main() {
-	dict := fwewdict.Global()
+	dict := litxap.MultiDictionary{
+		fwewdict.Global(),
+		namedict.FromFwewMultiWordParts(),
+	}
 
 	listenAddr := fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
 	if listenAddr == ":" {

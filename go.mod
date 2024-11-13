@@ -10,7 +10,7 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/gissleh/litxap v0.0.0-20241111140912-db560b129a7c // indirect
+	github.com/gissleh/litxap v0.0.0-20241113001533-f9535304019c // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
