@@ -18,6 +18,8 @@ github.com/gissleh/litxap v0.0.0-20241111140912-db560b129a7c h1:1VK+XUoiDflNK1cQ
 github.com/gissleh/litxap v0.0.0-20241111140912-db560b129a7c/go.mod h1:MQm+GZW5MQSxjfKu4ad/62e/W08rL3whmRQFVXlTioY=
 github.com/gissleh/litxap v0.0.0-20241113001533-f9535304019c h1:LR80+xRs55JBUo+LYSqXvALQoFuaTWnWFVveVoJ/mRg=
 github.com/gissleh/litxap v0.0.0-20241113001533-f9535304019c/go.mod h1:MQm+GZW5MQSxjfKu4ad/62e/W08rL3whmRQFVXlTioY=
+github.com/gissleh/litxap v0.0.0-20241113222355-50091c25f9fe h1:vGQCOJkUr+6KVJbH8Fsx3YkFhy//tVXDn70DVQjnoEk=
+github.com/gissleh/litxap v0.0.0-20241113222355-50091c25f9fe/go.mod h1:MQm+GZW5MQSxjfKu4ad/62e/W08rL3whmRQFVXlTioY=
 github.com/go-sql-driver/mysql v1.8.1 h1:LedoTUt/eveggdHS9qUFC1EFSa8bU2+1pZjSRpvNJ1Y=
 github.com/go-sql-driver/mysql v1.8.1/go.mod h1:wEBSXgmK//2ZFJyE+qWnIsVGmvmEKlqwuVSjsCm7DZg=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
