@@ -7,9 +7,9 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	res := New("nor", "no", "ta-*mu")
-	assert.Equal(t, []string{"nor: : Custom Name", "no: -r: Custom Name"}, res.(*nameDict).table["nor"])
-	assert.Equal(t, []string{"ta.*mu: -ri: Custom Name"}, res.(*nameDict).table["tamuri"])
+	res := New("nor", "no", "ta-*mu", "kelnì")
+	assert.Equal(t, []string{"nor: ", "no: -r "}, res.(*nameDict).table["nor"])
+	assert.Equal(t, []string{"ta.*mu: -ri "}, res.(*nameDict).table["tamuri"])
 
 	entries, err := res.LookupEntries("nor")
 	assert.NoError(t, err)
@@ -22,6 +22,12 @@ func TestNew(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, []litxap.Entry{
 		*litxap.ParseEntry("ta.*mu: -l: Custom Name"),
+	}, entries)
+
+	entries, err = res.LookupEntries("kelnur")
+	assert.NoError(t, err)
+	assert.Equal(t, []litxap.Entry{
+		*litxap.ParseEntry("kelnì: -ur: Custom Name"),
 	}, entries)
 
 	entries, err = res.LookupEntries("neytiriti")
