@@ -19,6 +19,7 @@ func main() {
 	dict := litxap.MultiDictionary{
 		fwewdict.Global(),
 		namedict.FromFwewMultiWordParts(),
+		&litxap.NumberDictionary{},
 	}
 
 	listenAddr := fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
