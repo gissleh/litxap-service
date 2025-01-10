@@ -2,7 +2,6 @@ package fwewdict
 
 import (
 	"bytes"
-	"log"
 	"slices"
 	"strings"
 	"sync"
@@ -50,7 +49,6 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 			}
 
 			syllables := strings.Split(strings.ReplaceAll(strings.ToLower(match.Syllables), " ", "-"), "-")
-			log.Println(syllables)
 
 			for _, ipa := range strings.Split(match.IPA, "or") {
 				ipa = strings.Trim(ipa, " []")
@@ -81,8 +79,6 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 					Infixes:     match.Affixes.Infix,
 					Suffixes:    suffixes,
 				}
-
-				log.Println(word, entry.String())
 
 				entries = append(entries, entry)
 			}
