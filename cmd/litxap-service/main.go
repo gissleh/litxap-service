@@ -53,6 +53,10 @@ func main() {
 				return
 			}
 
+			if q.Get("unstress_si") == "true" {
+				line = line.UnStressSiVerbParts(dict)
+			}
+
 			w.WriteHeader(http.StatusOK)
 			_ = json.NewEncoder(w).Encode(map[string]any{"line": line})
 		}))
