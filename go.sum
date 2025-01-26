@@ -49,6 +49,8 @@ github.com/gissleh/litxap v1.4.0/go.mod h1:MQm+GZW5MQSxjfKu4ad/62e/W08rL3whmRQFV
 github.com/gissleh/litxap v1.4.1/go.mod h1:MQm+GZW5MQSxjfKu4ad/62e/W08rL3whmRQFVXlTioY=
 github.com/gissleh/litxap v1.4.2 h1:naRapX/RtWo76KmxXE88WOifL5q59R3w+RIHVB3pEzM=
 github.com/gissleh/litxap v1.4.2/go.mod h1:MQm+GZW5MQSxjfKu4ad/62e/W08rL3whmRQFVXlTioY=
+github.com/gissleh/litxap v1.4.3 h1:cVojtSVfU4WIdouovEx0udOO2kkB2qAGJDQkvf7N1tg=
+github.com/gissleh/litxap v1.4.3/go.mod h1:MQm+GZW5MQSxjfKu4ad/62e/W08rL3whmRQFVXlTioY=
 github.com/go-sql-driver/mysql v1.8.1 h1:LedoTUt/eveggdHS9qUFC1EFSa8bU2+1pZjSRpvNJ1Y=
 github.com/go-sql-driver/mysql v1.8.1/go.mod h1:wEBSXgmK//2ZFJyE+qWnIsVGmvmEKlqwuVSjsCm7DZg=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
