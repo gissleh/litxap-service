@@ -3,7 +3,7 @@ module github.com/gissleh/litxap-service
 go 1.22.2
 
 require (
-	github.com/fwew/fwew-lib/v5 v5.22.3-0.20241112155007-5f43c7781335
+	github.com/fwew/fwew-lib/v5 v5.22.4
 	github.com/stretchr/testify v1.10.0
 )
 
