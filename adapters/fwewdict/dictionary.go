@@ -2,6 +2,7 @@ package fwewdict
 
 import (
 	"bytes"
+	"log"
 	"slices"
 	"strings"
 	"sync"
@@ -32,7 +33,7 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 		}()
 	}
 
-	res, err := fwew_lib.TranslateFromNaviHash(word, true)
+	res, err := fwew_lib.TranslateFromNaviHash(word, true, false, true)
 	if atomic.CompareAndSwapInt32(&stopped, 0, 1) {
 		d.mu.Unlock()
 	}
@@ -119,8 +120,13 @@ func FindMultis() map[string]string {
 					fullWord.WriteString(" ")
 				}
 			}
-			result1, _ := fwew_lib.TranslateFromNaviHash(key, true)
-			result2, _ := fwew_lib.TranslateFromNaviHash(fullWord.String(), true)
+			result1, _ := fwew_lib.TranslateFromNaviHash(key, true, false, true)
+			result2, _ := fwew_lib.TranslateFromNaviHash(fullWord.String(), true, false, true)
+			if len(result2[0]) == 1 {
+				log.Println(fullWord.String(), "-- not found")
+				continue
+			}
+
 			IPAstring = strings.Split(result2[0][1].IPA, " ")
 
 			if len(result1[0]) < 2 {
@@ -128,7 +134,7 @@ func FindMultis() map[string]string {
 			}
 
 			for i, multiword := range stringArray {
-				res3, _ := fwew_lib.TranslateFromNaviHash(multiword, true)
+				res3, _ := fwew_lib.TranslateFromNaviHash(multiword, true, false, true)
 				if len(res3[0]) < 2 {
 					doubles[multiword] = IPAstring[i+1]
 				}
