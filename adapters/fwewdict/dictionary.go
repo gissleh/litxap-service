@@ -75,7 +75,7 @@ func (d *fwewDict) LookupEntries(word string) ([]litxap.Entry, error) {
 					Translation: match.EN,
 					Syllables:   syllables,
 					Stress:      stressIndex,
-					InfixPos:    litxaputil.InfixPositionsFromBrackets(match.InfixLocations, syllables),
+					InfixPos:    litxaputil.InfixPositionsFromBrackets(strings.ReplaceAll(match.InfixLocations, " ", ""), syllables),
 					Prefixes:    match.Affixes.Prefix,
 					Infixes:     match.Affixes.Infix,
 					Suffixes:    suffixes,
