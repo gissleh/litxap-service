@@ -17,6 +17,6 @@ require (
 )
 
 //for testing edits to dependencies, make sure you go get after you comment them back.
-//replace github.com/gissleh/litxap => ../litxap
-//replace github.com/gissleh/litxaputil => ../litxap/litxaputil
-//replace github.com/fwew/fwew-lib/v5 => ../fwew-lib
+// replace github.com/gissleh/litxap => ../litxap
+// replace github.com/gissleh/litxaputil => ../litxap/litxaputil
+// replace github.com/fwew/fwew-lib/v5 => ../fwew-lib
