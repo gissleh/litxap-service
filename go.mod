@@ -4,7 +4,7 @@ go 1.22.2
 
 require (
 	github.com/fwew/fwew-lib/v5 v5.24.2
-	github.com/gissleh/litxap v1.6.0
+	github.com/gissleh/litxap v1.6.1
 	github.com/stretchr/testify v1.10.0
 )
 
