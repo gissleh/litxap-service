@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gissleh/litxap-service/adapters/fwewdict"
 	"log"
 	"net/http"
 	"os"
@@ -12,13 +11,13 @@ import (
 	"syscall"
 
 	"github.com/gissleh/litxap"
-	"github.com/gissleh/litxap-service/adapters/namedict"
+	litxapfwew "github.com/gissleh/litxap-fwew"
 )
 
 func main() {
 	dict := litxap.MultiDictionary{
-		fwewdict.Global(),
-		namedict.FromFwewMultiWordParts(),
+		litxapfwew.Global(),
+		litxapfwew.MultiWordPartDictionary(),
 		&litxap.NumberDictionary{},
 	}
 
@@ -40,7 +39,7 @@ func main() {
 
 			dict := dict
 			if names := r.URL.Query().Get("names"); names != "" {
-				dict = litxap.MultiDictionary{dict, namedict.New(strings.Split(names, ",")...)}
+				dict = litxap.MultiDictionary{dict, litxap.CustomWords(strings.Split(names, ","), "")}
 			}
 
 			w.Header().Set("Content-Type", "application/json")
@@ -51,10 +50,6 @@ func main() {
 				w.WriteHeader(http.StatusBadRequest)
 				_ = json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 				return
-			}
-
-			if q.Get("unstress_si") == "true" {
-				line = line.UnStressSiVerbParts(dict)
 			}
 
 			w.WriteHeader(http.StatusOK)

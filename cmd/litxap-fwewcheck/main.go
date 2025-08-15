@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/gissleh/litxap-service/adapters/fwewdict"
 	"log"
+
+	litxapfwew "github.com/gissleh/litxap-fwew"
 )
 
 func main() {
-	entries, err := fwewdict.Global().LookupEntries("tìfmetok")
+	entries, err := litxapfwew.Global().LookupEntries("tìfmetok")
 	if err != nil {
 		log.Fatalln("Failed to lookup tìfmetok:", err)
 		return
