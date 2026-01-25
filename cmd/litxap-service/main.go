@@ -26,6 +26,8 @@ func main() {
 		listenAddr = ":8081"
 	}
 
+	debugAllowOrigin := os.Getenv("LITXAP_ALLOW_ORIGIN")
+
 	log.Println("Starting with address:", listenAddr)
 
 	errCh := make(chan error)
@@ -43,6 +45,9 @@ func main() {
 			}
 
 			w.Header().Set("Content-Type", "application/json")
+			if debugAllowOrigin != "" {
+				w.Header().Set("Access-Control-Allow-Origin", debugAllowOrigin)
+			}
 
 			q := r.URL.Query()
 			line, err := litxap.RunLine(q.Get("line"), dict)
