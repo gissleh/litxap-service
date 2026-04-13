@@ -1,20 +1,19 @@
 module github.com/gissleh/litxap-service
 
-go 1.22.2
+go 1.24
+
+toolchain go1.24.0
 
 require (
-	github.com/fwew/fwew-lib/v5 v5.27.0
-	github.com/gissleh/litxap v1.7.5
-	github.com/stretchr/testify v1.10.0
+	github.com/gissleh/litxap v1.9.0
+	github.com/gissleh/litxap-fwew v1.9.0-fwew5.27.2
 )
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/gissleh/litxap-fwew v1.7.5-fwew5.27.0 // indirect
+	github.com/fwew/fwew-lib/v5 v5.27.2 // indirect
 	github.com/go-sql-driver/mysql v1.9.3 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
+	github.com/stretchr/testify v1.10.0 // indirect
 )
 
 //for testing edits to dependencies, make sure you go get after you comment them back.
