@@ -224,7 +224,7 @@ func main() {
 					}
 				}
 
-				ipa, err := line.IPA(input.Selections[i])
+				ipa, err := line.IPA(input.Selections[i], ".")
 				if err != nil {
 					res.Formats.IPA = append(res.Formats.IPA, "ERROR: "+err.Error())
 				} else {
