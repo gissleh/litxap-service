@@ -12,6 +12,10 @@ github.com/gissleh/litxap v1.11.2 h1:SuqkTQWNmJA8L47KGjhxA4uyxKXA2pcOHgbDDf/HGF4
 github.com/gissleh/litxap v1.11.2/go.mod h1:0fGiI9bqwFbBEs17QNWLRp4orydx+os2E1hHmtspszw=
 github.com/gissleh/litxap v1.11.3 h1:LUWKPInhTyLUKDCOUTrsj9tlVWa2meDbYJezCKF2DLE=
 github.com/gissleh/litxap v1.11.3/go.mod h1:0fGiI9bqwFbBEs17QNWLRp4orydx+os2E1hHmtspszw=
+github.com/gissleh/litxap v1.12.0 h1:tQAioVgjjjYu4u3IgkysQMqtIB1TxNOresCaT7kG4Hw=
+github.com/gissleh/litxap v1.12.0/go.mod h1:0fGiI9bqwFbBEs17QNWLRp4orydx+os2E1hHmtspszw=
+github.com/gissleh/litxap v1.12.1 h1:O3wZ5pSGj/JNdQkup9Z/XHHgxF3v/FcF4auvqw6qyFc=
+github.com/gissleh/litxap v1.12.1/go.mod h1:0fGiI9bqwFbBEs17QNWLRp4orydx+os2E1hHmtspszw=
 github.com/gissleh/litxap-fwew v1.11.0-fwewv5.27.2 h1:V6W6Ips7GqdJPnC7RuDL/9nIU8NRiYa7KWdktm//OAA=
 github.com/gissleh/litxap-fwew v1.11.0-fwewv5.27.2/go.mod h1:sft/ohe+m6zvTBaemGGXSWoT9yfgtTj3hysJlpKK3ec=
 github.com/gissleh/litxap-fwew v1.11.1-fwewv5.27.2 h1:zW30An1cjlakq5wpoKeRidESKlACkiPEUGeufYudkeM=
@@ -20,6 +24,10 @@ github.com/gissleh/litxap-fwew v1.11.2-fwewv5.27.2 h1:6TUjDetlCArXXOzvmRE8vgPl86
 github.com/gissleh/litxap-fwew v1.11.2-fwewv5.27.2/go.mod h1:24ciVLnkb7U0ktEr+ftuMzYEFa8ft1gzEQlLQdDegG4=
 github.com/gissleh/litxap-fwew v1.11.3-fwewv5.27.2 h1:77qjZWYFmOMAx077xC9udOQtAUQqDCBvFo/Yv4SbQDc=
 github.com/gissleh/litxap-fwew v1.11.3-fwewv5.27.2/go.mod h1:pkt0wce4quJtvqBlSVHoHKL+i6wzd3t9rIVd/iH6oV8=
+github.com/gissleh/litxap-fwew v1.12.0-fwewv5.27.2 h1:9yfx3b7psK8md+6gYLEFGH8/DyiXP7K47vKvknm45LA=
+github.com/gissleh/litxap-fwew v1.12.0-fwewv5.27.2/go.mod h1:EO3r9YrKcXFgI+lFCPXxsT7wH/iiGt7Q5xtvd+9YLFk=
+github.com/gissleh/litxap-fwew v1.12.1-fwewv5.27.2 h1:tl5/sYmIJeny64pdHiJXlifpaFN98iI4IR+KbYUSAzk=
+github.com/gissleh/litxap-fwew v1.12.1-fwewv5.27.2/go.mod h1:QvdHwF3KuVge9ZYjCGhTazCOnfLWFZijVvFp3Tf3qY8=
 github.com/go-sql-driver/mysql v1.9.3 h1:U/N249h2WzJ3Ukj8SowVFjdtZKfu9vlLZxjPXV1aweo=
 github.com/go-sql-driver/mysql v1.9.3/go.mod h1:qn46aNg1333BRMNU69Lq93t8du/dwxI64Gl8i5p1WMU=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

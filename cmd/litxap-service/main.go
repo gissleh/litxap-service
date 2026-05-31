@@ -14,6 +14,7 @@ import (
 
 	"github.com/gissleh/litxap"
 	litxapfwew "github.com/gissleh/litxap-fwew"
+	"github.com/gissleh/litxap/litxapfilter"
 	"github.com/gissleh/litxap/litxapformats"
 )
 
@@ -60,6 +61,13 @@ func main() {
 				Multiline   bool                `json:"multiline,omitempty"`
 				Selections  map[int]map[int]int `json:"selections,omitempty"`
 				CustomWords []string            `json:"customWords,omitempty"`
+				Filters     struct {
+					DiphthongFromWeakVowel          bool `json:"diphthongFromWeakVowel,omitempty"`
+					ReanalyzeDiphthongs             bool `json:"reanalyzeDiphthongs,omitempty"`
+					DemoteEjectivesBeforeConsonants bool `json:"demoteEjectivesBeforeConsonants,omitempty"`
+					NasalAssimilation               bool `json:"nasalAssimilation,omitempty"`
+					SaeRemover                      bool `json:"saeRemover,omitempty"`
+				} `json:"filters"`
 			}
 			dict := dict
 
@@ -132,6 +140,23 @@ func main() {
 						input.CustomWords[i] = strings.TrimSpace(word)
 					}
 				}
+				if filters := r.URL.Query().Get("filters"); filters != "" {
+					for _, filter := range strings.Split(filters, ",") {
+						switch filter {
+						case "diphthongFromWeakVowel", "dfwv":
+							input.Filters.DiphthongFromWeakVowel = true
+						case "reanalyzeDiphthongs", "rd":
+							input.Filters.ReanalyzeDiphthongs = true
+						case "demoteEjectivesBeforeConsonants", "debc":
+							input.Filters.DemoteEjectivesBeforeConsonants = true
+						case "nasalAssimilation", "na":
+							input.Filters.NasalAssimilation = true
+						case "saeRemover", "sr":
+							input.Filters.SaeRemover = true
+						default:
+						}
+					}
+				}
 			case "POST":
 				err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 16384)).Decode(&input)
 				if err != nil {
@@ -183,6 +208,24 @@ func main() {
 			*/
 
 			res := output{RunDurationMS: runDurationMs}
+
+			for i := range lines {
+				if input.Filters.DiphthongFromWeakVowel {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.DiphthongFromWeakVowel)
+				}
+				if input.Filters.ReanalyzeDiphthongs {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReanalyzeDiphthongs)
+				}
+				if input.Filters.DemoteEjectivesBeforeConsonants {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.DemoteEjectivesBeforeConsonants)
+				}
+				if input.Filters.NasalAssimilation {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.NasalAssimilation)
+				}
+				if input.Filters.SaeRemover {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.SaeRemover)
+				}
+			}
 
 			if input.Multiline {
 				res.Lines = lines
