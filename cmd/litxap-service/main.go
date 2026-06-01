@@ -62,11 +62,17 @@ func main() {
 				Selections  map[int]map[int]int `json:"selections,omitempty"`
 				CustomWords []string            `json:"customWords,omitempty"`
 				Filters     struct {
-					DiphthongFromWeakVowel          bool `json:"diphthongFromWeakVowel,omitempty"`
-					ReanalyzeDiphthongs             bool `json:"reanalyzeDiphthongs,omitempty"`
-					DemoteEjectivesBeforeConsonants bool `json:"demoteEjectivesBeforeConsonants,omitempty"`
-					NasalAssimilation               bool `json:"nasalAssimilation,omitempty"`
-					SaeRemover                      bool `json:"saeRemover,omitempty"`
+					DiphthongFromWeakVowel            bool `json:"diphthongFromWeakVowel,omitempty"`
+					ReanalyzeDiphthongs               bool `json:"reanalyzeDiphthongs,omitempty"`
+					DemoteEjectivesBeforeConsonants   bool `json:"demoteEjectivesBeforeConsonants,omitempty"`
+					RemoveRepeatedEjective            bool `json:"removeRepeatedEjective,omitempty"`
+					NasalAssimilation                 bool `json:"nasalAssimilation,omitempty"`
+					SaeRemover                        bool `json:"saeRemover,omitempty"`
+					SpellOeAsWe                       bool `json:"spellOeAsWe,omitempty"`
+					ReefUnstressedAeAsE               bool `json:"reefUnstressedAeAsE,omitempty"`
+					ReefEjectiveToVoiced              bool `json:"reefEjectiveToVoiced,omitempty"`
+					ReefDropGlottalStopsBetweenVowels bool `json:"reefDropGlottalStopsBetweenVowels,omitempty"`
+					ReefApplyChSh                     bool `json:"reefApplyChSh,omitempty"`
 				} `json:"filters"`
 			}
 			dict := dict
@@ -149,10 +155,22 @@ func main() {
 							input.Filters.ReanalyzeDiphthongs = true
 						case "demoteEjectivesBeforeConsonants", "debc":
 							input.Filters.DemoteEjectivesBeforeConsonants = true
+						case "removeRepeatedEjective", "rre":
+							input.Filters.RemoveRepeatedEjective = true
 						case "nasalAssimilation", "na":
 							input.Filters.NasalAssimilation = true
 						case "saeRemover", "sr":
 							input.Filters.SaeRemover = true
+						case "spellOeAsWe", "soaw":
+							input.Filters.SpellOeAsWe = true
+						case "reefUnstressedAeAsE", "r_uaae":
+							input.Filters.ReefUnstressedAeAsE = true
+						case "reefEjectiveToVoiced", "r_etv":
+							input.Filters.ReefEjectiveToVoiced = true
+						case "reefDropGlottalStopsBetweenVowels", "r_dgsbv":
+							input.Filters.ReefDropGlottalStopsBetweenVowels = true
+						case "reefApplyChSh", "r_chsh":
+							input.Filters.ReefApplyChSh = true
 						default:
 						}
 					}
@@ -219,11 +237,29 @@ func main() {
 				if input.Filters.DemoteEjectivesBeforeConsonants {
 					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.DemoteEjectivesBeforeConsonants)
 				}
+				if input.Filters.RemoveRepeatedEjective {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.RemoveRepeatedEjective)
+				}
 				if input.Filters.NasalAssimilation {
 					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.NasalAssimilation)
 				}
 				if input.Filters.SaeRemover {
 					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.SaeRemover)
+				}
+				if input.Filters.SpellOeAsWe {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.SpellOeAsWe)
+				}
+				if input.Filters.ReefUnstressedAeAsE {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReefUnstressedAeAsE)
+				}
+				if input.Filters.ReefEjectiveToVoiced {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReefEjectiveToVoiced)
+				}
+				if input.Filters.ReefDropGlottalStopsBetweenVowels {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReefDropGlottalStopsBetweenVowels)
+				}
+				if input.Filters.ReefApplyChSh {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReefApplyChSh)
 				}
 			}
 
