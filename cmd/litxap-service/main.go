@@ -73,6 +73,9 @@ func main() {
 					ReefEjectiveToVoiced              bool `json:"reefEjectiveToVoiced,omitempty"`
 					ReefDropGlottalStopsBetweenVowels bool `json:"reefDropGlottalStopsBetweenVowels,omitempty"`
 					ReefApplyChSh                     bool `json:"reefApplyChSh,omitempty"`
+					ElideUnstressedEWordEndings       bool `json:"elideUnstressedEWordEndings,omitempty"`
+					ElideMiSiNiBeforeAy               bool `json:"elideMiSiNiBeforeAy,omitempty"`
+					ElideAdvPrefixAndE                bool `json:"elideAdvPrefixAndE,omitempty"`
 				} `json:"filters"`
 			}
 			dict := dict
@@ -163,6 +166,12 @@ func main() {
 							input.Filters.SaeRemover = true
 						case "spellOeAsWe", "soaw":
 							input.Filters.SpellOeAsWe = true
+						case "elideUnstressedEWordEndings", "euewe":
+							input.Filters.ElideUnstressedEWordEndings = true
+						case "elideMiSiNiBeforeAy", "emsnba":
+							input.Filters.ElideMiSiNiBeforeAy = true
+						case "elideAdvPrefixAndE", "eapae":
+							input.Filters.ElideAdvPrefixAndE = true
 						case "reefUnstressedAeAsE", "r_uaae":
 							input.Filters.ReefUnstressedAeAsE = true
 						case "reefEjectiveToVoiced", "r_etv":
@@ -248,6 +257,15 @@ func main() {
 				}
 				if input.Filters.SpellOeAsWe {
 					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.SpellOeAsWe)
+				}
+				if input.Filters.ElideUnstressedEWordEndings {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ElideUnstressedEWordEndings)
+				}
+				if input.Filters.ElideMiSiNiBeforeAy {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ElideMiSiNiBeforeAy)
+				}
+				if input.Filters.ElideAdvPrefixAndE {
+					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ElideAdvPrefixAndE)
 				}
 				if input.Filters.ReefUnstressedAeAsE {
 					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReefUnstressedAeAsE)
