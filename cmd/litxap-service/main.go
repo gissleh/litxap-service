@@ -44,16 +44,37 @@ func main() {
 				DiscordMarkdown []string `json:"discordMarkdown"`
 				BBCode          []string `json:"bbCode"`
 				CompactHtml     []string `json:"compactHtml"`
+				IRC             []string `json:"irc"`
 			}
 
 			type output struct {
-				Line            litxap.Line   `json:"line,omitempty"`
-				Lines           []litxap.Line `json:"lines,omitempty"`
-				Formats         outputFormats `json:"formats"`
-				Ambiguities     []any         `json:"ambiguities"`
-				UnknownWords    []any         `json:"unknownWords"`
-				RunDurationMS   float64       `json:"runDurationMs"`
-				TotalDurationMS float64       `json:"totalDurationMs"`
+				Line             litxap.Line   `json:"line,omitempty"`
+				Lines            []litxap.Line `json:"lines,omitempty"`
+				FilteredLines    []litxap.Line `json:"filteredLines,omitempty"`
+				Formats          outputFormats `json:"formats"`
+				Ambiguities      []any         `json:"ambiguities"`
+				UnknownWords     []any         `json:"unknownWords"`
+				RunDurationMS    float64       `json:"runDurationMs"`
+				TotalDurationMS  float64       `json:"totalDurationMs"`
+				FilterDurationMS float64       `json:"filterDurationMs"`
+				FormatDurationMS float64       `json:"formatDurationMs"`
+			}
+
+			type inputFilters struct {
+				DiphthongFromWeakVowel            bool `json:"diphthongFromWeakVowel,omitempty"`
+				ReanalyzeDiphthongs               bool `json:"reanalyzeDiphthongs,omitempty"`
+				DemoteEjectivesBeforeConsonants   bool `json:"demoteEjectivesBeforeConsonants,omitempty"`
+				RemoveRepeatedEjective            bool `json:"removeRepeatedEjective,omitempty"`
+				NasalAssimilation                 bool `json:"nasalAssimilation,omitempty"`
+				SaeRemover                        bool `json:"saeRemover,omitempty"`
+				SpellOeAsWe                       bool `json:"spellOeAsWe,omitempty"`
+				ReefUnstressedAeAsE               bool `json:"reefUnstressedAeAsE,omitempty"`
+				ReefEjectiveToVoiced              bool `json:"reefEjectiveToVoiced,omitempty"`
+				ReefDropGlottalStopsBetweenVowels bool `json:"reefDropGlottalStopsBetweenVowels,omitempty"`
+				ReefApplyChSh                     bool `json:"reefApplyChSh,omitempty"`
+				ElideUnstressedEWordEndings       bool `json:"elideUnstressedEWordEndings,omitempty"`
+				ElideMiSiNiBeforeAy               bool `json:"elideMiSiNiBeforeAy,omitempty"`
+				ElideAdvPrefixAndE                bool `json:"elideAdvPrefixAndE,omitempty"`
 			}
 
 			var input struct {
@@ -61,22 +82,7 @@ func main() {
 				Multiline   bool                `json:"multiline,omitempty"`
 				Selections  map[int]map[int]int `json:"selections,omitempty"`
 				CustomWords []string            `json:"customWords,omitempty"`
-				Filters     struct {
-					DiphthongFromWeakVowel            bool `json:"diphthongFromWeakVowel,omitempty"`
-					ReanalyzeDiphthongs               bool `json:"reanalyzeDiphthongs,omitempty"`
-					DemoteEjectivesBeforeConsonants   bool `json:"demoteEjectivesBeforeConsonants,omitempty"`
-					RemoveRepeatedEjective            bool `json:"removeRepeatedEjective,omitempty"`
-					NasalAssimilation                 bool `json:"nasalAssimilation,omitempty"`
-					SaeRemover                        bool `json:"saeRemover,omitempty"`
-					SpellOeAsWe                       bool `json:"spellOeAsWe,omitempty"`
-					ReefUnstressedAeAsE               bool `json:"reefUnstressedAeAsE,omitempty"`
-					ReefEjectiveToVoiced              bool `json:"reefEjectiveToVoiced,omitempty"`
-					ReefDropGlottalStopsBetweenVowels bool `json:"reefDropGlottalStopsBetweenVowels,omitempty"`
-					ReefApplyChSh                     bool `json:"reefApplyChSh,omitempty"`
-					ElideUnstressedEWordEndings       bool `json:"elideUnstressedEWordEndings,omitempty"`
-					ElideMiSiNiBeforeAy               bool `json:"elideMiSiNiBeforeAy,omitempty"`
-					ElideAdvPrefixAndE                bool `json:"elideAdvPrefixAndE,omitempty"`
-				} `json:"filters"`
+				Filters     inputFilters        `json:"filters"`
 			}
 			dict := dict
 
@@ -236,48 +242,60 @@ func main() {
 
 			res := output{RunDurationMS: runDurationMs}
 
-			for i := range lines {
+			filterStart := time.Now()
+
+			var emptyFilters inputFilters
+			if input.Filters != emptyFilters {
+				filters := make([]litxapfilter.Filter, 0, 16)
 				if input.Filters.DiphthongFromWeakVowel {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.DiphthongFromWeakVowel)
+					filters = append(filters, litxapfilter.DiphthongFromWeakVowel)
 				}
 				if input.Filters.ReanalyzeDiphthongs {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReanalyzeDiphthongs)
+					filters = append(filters, litxapfilter.ReanalyzeDiphthongs)
 				}
 				if input.Filters.DemoteEjectivesBeforeConsonants {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.DemoteEjectivesBeforeConsonants)
+					filters = append(filters, litxapfilter.DemoteEjectivesBeforeConsonants)
 				}
 				if input.Filters.RemoveRepeatedEjective {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.RemoveRepeatedEjective)
+					filters = append(filters, litxapfilter.RemoveRepeatedEjective)
 				}
 				if input.Filters.NasalAssimilation {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.NasalAssimilation)
+					filters = append(filters, litxapfilter.NasalAssimilation)
 				}
 				if input.Filters.SaeRemover {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.SaeRemover)
+					filters = append(filters, litxapfilter.SaeRemover)
 				}
 				if input.Filters.SpellOeAsWe {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.SpellOeAsWe)
+					filters = append(filters, litxapfilter.SpellOeAsWe)
 				}
 				if input.Filters.ElideUnstressedEWordEndings {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ElideUnstressedEWordEndings)
+					filters = append(filters, litxapfilter.ElideUnstressedEWordEndings)
 				}
 				if input.Filters.ElideMiSiNiBeforeAy {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ElideMiSiNiBeforeAy)
+					filters = append(filters, litxapfilter.ElideMiSiNiBeforeAy)
 				}
 				if input.Filters.ElideAdvPrefixAndE {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ElideAdvPrefixAndE)
+					filters = append(filters, litxapfilter.ElideAdvPrefixAndE)
 				}
 				if input.Filters.ReefUnstressedAeAsE {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReefUnstressedAeAsE)
+					filters = append(filters, litxapfilter.ReefUnstressedAeAsE)
 				}
 				if input.Filters.ReefEjectiveToVoiced {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReefEjectiveToVoiced)
+					filters = append(filters, litxapfilter.ReefEjectiveToVoiced)
 				}
 				if input.Filters.ReefDropGlottalStopsBetweenVowels {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReefDropGlottalStopsBetweenVowels)
+					filters = append(filters, litxapfilter.ReefDropGlottalStopsBetweenVowels)
 				}
 				if input.Filters.ReefApplyChSh {
-					lines[i] = litxapfilter.ApplyFilter(lines[i], litxapfilter.ReefApplyChSh)
+					filters = append(filters, litxapfilter.ReefApplyChSh)
+				}
+
+				res.FilteredLines = make([]litxap.Line, len(lines))
+				for i := range lines {
+					res.FilteredLines[i] = litxapfilter.ApplyFilters(
+						lines[i].WithSelections(input.Selections[i], true),
+						filters...,
+					)
 				}
 			}
 
@@ -287,22 +305,35 @@ func main() {
 				res.Line = lines[0]
 			}
 
+			res.FilterDurationMS = time.Since(filterStart).Seconds() * 1000
+
+			formatStart := time.Now()
 			for i, line := range lines {
+				selections := input.Selections[i]
+				if res.FilteredLines != nil && res.FilteredLines[i] != nil {
+					line = res.FilteredLines[i]
+					selections = nil
+				}
+
 				res.Formats.DiscordMarkdown = append(
 					res.Formats.DiscordMarkdown,
-					line.Format(litxapformats.DiscordMarkdown(), input.Selections[i]),
+					line.Format(litxapformats.DiscordMarkdown(), selections),
 				)
 				res.Formats.BBCode = append(
 					res.Formats.BBCode,
-					line.Format(litxapformats.BBCode(), input.Selections[i]),
+					line.Format(litxapformats.BBCode(), selections),
 				)
 				res.Formats.CompactHtml = append(
 					res.Formats.CompactHtml,
-					line.Format(litxapformats.CompactHTML(), input.Selections[i]),
+					line.Format(litxapformats.CompactHTML(), selections),
+				)
+				res.Formats.IRC = append(
+					res.Formats.IRC,
+					line.Format(litxapformats.IRCDefaultColors(), selections),
 				)
 
 				for j, part := range line {
-					selection, ok := input.Selections[i][j]
+					selection, ok := selections[j]
 					if !ok {
 						selection = -1
 					}
@@ -321,16 +352,15 @@ func main() {
 					}
 				}
 
-				ipa, err := line.IPA(input.Selections[i], ".")
+				ipa, err := line.IPA(selections, ".")
 				if err != nil {
 					res.Formats.IPA = append(res.Formats.IPA, "ERROR: "+err.Error())
 				} else {
 					res.Formats.IPA = append(res.Formats.IPA, ipa)
 				}
 			}
-
-			totalDurationMs := time.Since(totalStart).Seconds() * 1000
-			res.TotalDurationMS = totalDurationMs
+			res.FormatDurationMS = time.Since(formatStart).Seconds() * 1000
+			res.TotalDurationMS = time.Since(totalStart).Seconds() * 1000
 
 			w.WriteHeader(http.StatusOK)
 			_ = json.NewEncoder(w).Encode(res)

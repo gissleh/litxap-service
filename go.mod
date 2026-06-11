@@ -3,8 +3,8 @@ module github.com/gissleh/litxap-service
 go 1.25.0
 
 require (
-	github.com/gissleh/litxap v1.15.0
-	github.com/gissleh/litxap-fwew v1.15.0-fwewv5.28.0
+	github.com/gissleh/litxap v1.16.0
+	github.com/gissleh/litxap-fwew v1.16.0-fwew5.28.0
 )
 
 require (
