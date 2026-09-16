@@ -66,6 +66,7 @@ func main() {
 				DemoteEjectivesBeforeConsonants   bool `json:"demoteEjectivesBeforeConsonants,omitempty"`
 				RemoveRepeatedEjective            bool `json:"removeRepeatedEjective,omitempty"`
 				NasalAssimilation                 bool `json:"nasalAssimilation,omitempty"`
+				NasalAssimilationCasual           bool `json:"nasalAssimilationCasual,omitempty"`
 				SaeRemover                        bool `json:"saeRemover,omitempty"`
 				SpellOeAsWe                       bool `json:"spellOeAsWe,omitempty"`
 				ReefUnstressedAeAsE               bool `json:"reefUnstressedAeAsE,omitempty"`
@@ -168,6 +169,8 @@ func main() {
 							input.Filters.RemoveRepeatedEjective = true
 						case "nasalAssimilation", "na":
 							input.Filters.NasalAssimilation = true
+						case "nasalAssimilationCasual", "nac":
+							input.Filters.NasalAssimilationCasual = true
 						case "saeRemover", "sr":
 							input.Filters.SaeRemover = true
 						case "spellOeAsWe", "soaw":
@@ -259,7 +262,9 @@ func main() {
 				if input.Filters.RemoveRepeatedEjective {
 					filters = append(filters, litxapfilter.RemoveRepeatedEjective)
 				}
-				if input.Filters.NasalAssimilation {
+				if input.Filters.NasalAssimilationCasual {
+					filters = append(filters, litxapfilter.NasalAssimilationCasual)
+				} else if input.Filters.NasalAssimilation {
 					filters = append(filters, litxapfilter.NasalAssimilation)
 				}
 				if input.Filters.SaeRemover {
