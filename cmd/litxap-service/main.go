@@ -61,21 +61,22 @@ func main() {
 			}
 
 			type inputFilters struct {
-				DiphthongFromWeakVowel            bool `json:"diphthongFromWeakVowel,omitempty"`
-				ReanalyzeDiphthongs               bool `json:"reanalyzeDiphthongs,omitempty"`
-				DemoteEjectivesBeforeConsonants   bool `json:"demoteEjectivesBeforeConsonants,omitempty"`
-				RemoveRepeatedEjective            bool `json:"removeRepeatedEjective,omitempty"`
-				NasalAssimilation                 bool `json:"nasalAssimilation,omitempty"`
-				NasalAssimilationCasual           bool `json:"nasalAssimilationCasual,omitempty"`
-				SaeRemover                        bool `json:"saeRemover,omitempty"`
-				SpellOeAsWe                       bool `json:"spellOeAsWe,omitempty"`
-				ReefUnstressedAeAsE               bool `json:"reefUnstressedAeAsE,omitempty"`
-				ReefEjectiveToVoiced              bool `json:"reefEjectiveToVoiced,omitempty"`
-				ReefDropGlottalStopsBetweenVowels bool `json:"reefDropGlottalStopsBetweenVowels,omitempty"`
-				ReefApplyChSh                     bool `json:"reefApplyChSh,omitempty"`
-				ElideUnstressedEWordEndings       bool `json:"elideUnstressedEWordEndings,omitempty"`
-				ElideMiSiNiBeforeAy               bool `json:"elideMiSiNiBeforeAy,omitempty"`
-				ElideAdvPrefixAndE                bool `json:"elideAdvPrefixAndE,omitempty"`
+				DropGlottalStopsBetweenUnlikeVowels bool `json:"dropGlottalStopsBetweenUnlikeVowels,omitempty"`
+				DiphthongFromWeakVowel              bool `json:"diphthongFromWeakVowel,omitempty"`
+				ReanalyzeDiphthongs                 bool `json:"reanalyzeDiphthongs,omitempty"`
+				DemoteEjectivesBeforeConsonants     bool `json:"demoteEjectivesBeforeConsonants,omitempty"`
+				RemoveRepeatedEjective              bool `json:"removeRepeatedEjective,omitempty"`
+				NasalAssimilation                   bool `json:"nasalAssimilation,omitempty"`
+				NasalAssimilationCasual             bool `json:"nasalAssimilationCasual,omitempty"`
+				SaeRemover                          bool `json:"saeRemover,omitempty"`
+				SpellOeAsWe                         bool `json:"spellOeAsWe,omitempty"`
+				ReefUnstressedAeAsE                 bool `json:"reefUnstressedAeAsE,omitempty"`
+				ReefEjectiveToVoiced                bool `json:"reefEjectiveToVoiced,omitempty"`
+				ReefDropGlottalStopsBetweenVowels   bool `json:"reefDropGlottalStopsBetweenVowels,omitempty"`
+				ReefApplyChSh                       bool `json:"reefApplyChSh,omitempty"`
+				ElideUnstressedEWordEndings         bool `json:"elideUnstressedEWordEndings,omitempty"`
+				ElideMiSiNiBeforeAy                 bool `json:"elideMiSiNiBeforeAy,omitempty"`
+				ElideAdvPrefixAndE                  bool `json:"elideAdvPrefixAndE,omitempty"`
 			}
 
 			var input struct {
@@ -159,6 +160,8 @@ func main() {
 				if filters := r.URL.Query().Get("filters"); filters != "" {
 					for _, filter := range strings.Split(filters, ",") {
 						switch filter {
+						case "dropGlottalStopsBetweenUnlikeVowels", "dgsbuv":
+							input.Filters.DropGlottalStopsBetweenUnlikeVowels = true
 						case "diphthongFromWeakVowel", "dfwv":
 							input.Filters.DiphthongFromWeakVowel = true
 						case "reanalyzeDiphthongs", "rd":
@@ -250,6 +253,14 @@ func main() {
 			var emptyFilters inputFilters
 			if input.Filters != emptyFilters {
 				filters := make([]litxapfilter.Filter, 0, 16)
+				if input.Filters.ReefDropGlottalStopsBetweenVowels {
+					filters = append(filters, litxapfilter.ReefDropGlottalStopsBetweenVowels)
+				} else if input.Filters.DropGlottalStopsBetweenUnlikeVowels {
+					filters = append(filters, litxapfilter.DropGlottalStopBetweenUnlikeVowels)
+				}
+				if input.Filters.ReefUnstressedAeAsE {
+					filters = append(filters, litxapfilter.ReefUnstressedAeAsE)
+				}
 				if input.Filters.DiphthongFromWeakVowel {
 					filters = append(filters, litxapfilter.DiphthongFromWeakVowel)
 				}
@@ -282,14 +293,8 @@ func main() {
 				if input.Filters.ElideAdvPrefixAndE {
 					filters = append(filters, litxapfilter.ElideAdvPrefixAndE)
 				}
-				if input.Filters.ReefUnstressedAeAsE {
-					filters = append(filters, litxapfilter.ReefUnstressedAeAsE)
-				}
 				if input.Filters.ReefEjectiveToVoiced {
 					filters = append(filters, litxapfilter.ReefEjectiveToVoiced)
-				}
-				if input.Filters.ReefDropGlottalStopsBetweenVowels {
-					filters = append(filters, litxapfilter.ReefDropGlottalStopsBetweenVowels)
 				}
 				if input.Filters.ReefApplyChSh {
 					filters = append(filters, litxapfilter.ReefApplyChSh)
